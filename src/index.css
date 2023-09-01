@@ -1,0 +1,14 @@
+#content {
+     margin-top: 90px !important;
+}
+
+.navbar .navbar-item .nav-item.user-profile-dropdown .dropdown-menu {
+     top: 100% !important;
+     margin-top: 10px;
+}
+
+.custom-modal {
+     .modal-content {
+          background-color: white;
+     }
+}

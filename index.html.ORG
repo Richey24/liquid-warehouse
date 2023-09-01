@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+     <head>
+          <meta charset="UTF-8" />
+          <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+          <title>Liquid Warehouse</title>
+     </head>
+     <body class="layout-boxed" layout="full-width" page="starter-pack">
+          <div id="root"></div>
+          <script type="module" src="/src/main.tsx"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.js"></script>
+          <!--<script type="module" src="/public/d3.js"></script>-->
+     </body>
+</html>

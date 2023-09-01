@@ -1,0 +1,21 @@
+/* MaterialTable.css */
+
+/* Style the container of the DataGrid */
+.material-table-container {
+     width: 100%;
+}
+
+/* Style the DataGrid cells */
+.react-grid-Cell {
+     padding: 8px;
+}
+
+/* Style the DataGrid header row */
+.react-grid-HeaderRow {
+     background-color: #f2f2f2;
+     font-weight: bold;
+}
+.rowClass {
+     background: #fff;
+     color: #fff;
+}

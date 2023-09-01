@@ -1,0 +1,63 @@
+.root {
+     width: 200px;
+     max-width: 400px;
+     flex: 1;
+     min-width: 200px;
+     border: 2px solid #fff;
+     border-radius: 8px;
+     padding: 16px 8px;
+     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.root > .tester > div > svg {
+     position: absolute;
+     z-index: 10;
+     /* height: 300px !important; */
+     top: 0;
+     right: 0;
+     left: 0;
+     bottom: 0;
+     height: 300px;
+}
+
+.root > .tester > div {
+     position: relative;
+     height: 300px;
+}
+.wrapper {
+     height: 150px;
+}
+
+.temperature {
+     background-color: #dc3545;
+     padding: 4px;
+     width: 100%;
+     text-align: center;
+     border-radius: 4px;
+     margin-top: 4px;
+     color: #fff;
+     animation: flashingAnimation 0.5s infinite alternate;
+}
+
+.tempText {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     margin-top: 4px;
+     padding: 8px;
+}
+.tempText > span {
+     text-transform: uppercase;
+}
+
+.flashing {
+}
+
+@keyframes flashingAnimation {
+     from {
+          opacity: 1;
+     }
+     to {
+          opacity: 0;
+     }
+}
