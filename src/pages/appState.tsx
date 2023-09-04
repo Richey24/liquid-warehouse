@@ -6,11 +6,15 @@ import LoadingScreen from "../components/LoadingScreen/LoadingScreen";
 import { useGetRoles } from "./Settings/hooks";
 import BatchView from "../components/BatchCheck/BatchCheck";
 
+interface IdleScreenSettings {
+     enabled: boolean;
+     idleTime: number;
+}
 
 export const AppContext = createContext<any>(null);
 
-const idle = JSON.parse(localStorage.getItem("idleScreen") as any);
-const timeout = idle?.idleTime ? idle?.idleTime * 60000 : 120000;
+// const idle = JSON.parse(localStorage.getItem("idleScreen") as any);
+// const timeout = idle?.idleTime ? idle?.idleTime * 60000 : 120000;
 
 export const AppState = ({ children }: { children: React.ReactChild }) => {
      const [tanksStore, setTanksStore] = useState(null);
@@ -20,10 +24,14 @@ export const AppState = ({ children }: { children: React.ReactChild }) => {
      const [user, setUser] = useState<any>(null);
      const [batchDetails, setBatchDetails] = useState<any>(null);
      const [batch, setBatch] = useState<any>(null);
+     const [idleScreenSettings, setIdleScreenSettings] = useState<IdleScreenSettings>({
+          enabled: false,
+          idleTime: 1,
+     });
      const [lowTemperature, setLowTemperature] = useState(false);
      const getAvatar = useGetAvatar();
      //console.log("tanksStore", tanksStore);
-
+     
      const unLockScreen = useUnlockScreen();
 
      const getMe = useGetMe();
@@ -31,11 +39,13 @@ export const AppState = ({ children }: { children: React.ReactChild }) => {
      const lockScreen = useLockScreen();
      const getBatch = useGetBatch();
      const getBatcDetails = useGetBatchDetails();
-
+     
      const onIdle = () => {
+          
           if (!location.pathname.match("/auth")) {
-               setOpen(true);
-               if (user || idle.enabled) {
+             
+               if (user && idleScreenSettings?.enabled) { 
+                    setOpen(true);
                     lockScreen(
                          user?.email,
                          () => {
@@ -54,6 +64,14 @@ export const AppState = ({ children }: { children: React.ReactChild }) => {
                getBatcDetails(417211, setLoading, setBatchDetails);
           }
      }, []);
+
+     useEffect(() => {
+          if (localStorage.getItem("idleScreen") !== null) {
+               setIdleScreenSettings(JSON.parse(localStorage.getItem("idleScreen") as any));
+          } else {
+               localStorage.setItem("idleScreen", JSON.stringify(idleScreenSettings));
+          }
+     }, [localStorage.getItem("idleScreen")]);
 
      useEffect(() => {
           const tanks = tanksStore as any;
@@ -80,6 +98,8 @@ export const AppState = ({ children }: { children: React.ReactChild }) => {
                setOpen(!user?.locked ? false : true);
           }
      }, [user]);
+
+     const timeout = idleScreenSettings?.idleTime ? idleScreenSettings?.idleTime * 60000 : 120000;
 
      useIdleTimer({
           onIdle,
@@ -109,6 +129,8 @@ export const AppState = ({ children }: { children: React.ReactChild }) => {
                     setBatch,
                     lowTemperature,
                     setLowTemperature,
+                    idleScreenSettings,
+                    setIdleScreenSettings,
                }}
           >
                <Lockscreen onClick={unLockScreen} />

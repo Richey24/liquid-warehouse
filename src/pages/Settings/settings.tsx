@@ -81,14 +81,16 @@ export const Settings: React.FC = () => {
      const [polling, setPolling] = useState<any>({
           time: 0,
      });
-     const [idleScreenSettings, setIdleScreenSettings] = useState<IdleScreenSettings>({
+     const [idleScreenSettingsLocal, setIdleScreenSettingsLocal] = useState<any>({
           enabled: false,
-          idleTime: 0,
+          idleTime: 1,
      });
-     const { tanksStore, user } = useContext<{
+     const { tanksStore, user, setIdleScreenSettings, idleScreenSettings } = useContext<{
           tanksStore: TankProps[] | null;
           setTanksStore: any;
           user: any;
+          idleScreenSettings: any;
+          setIdleScreenSettings: any;
      }>(AppContext);
      const [roles, setRoles] = useState<Role[]>([]);
      const [settingsLoading, setSettingsLoading] = useState(false);
@@ -124,8 +126,15 @@ export const Settings: React.FC = () => {
      }, [user]);
 
      useEffect(() => {
+          setIdleScreenSettingsLocal(idleScreenSettings);
+     }, [idleScreenSettings]);
+
+     useEffect(() => {
           if (localStorage.getItem("idleScreen") !== null) {
                setIdleScreenSettings(JSON.parse(localStorage.getItem("idleScreen") as any));
+          }
+          else{
+               localStorage.setItem("idleScreen",JSON.stringify(idleScreenSettings) as string)
           }
      }, [localStorage.getItem("idleScreen")]);
 
@@ -160,12 +169,12 @@ export const Settings: React.FC = () => {
      const handleIdleScreenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
           const { name, value, checked } = e.target;
           if (name === "enabled") {
-               setIdleScreenSettings((prevState) => ({
+               setIdleScreenSettingsLocal((prevState) => ({
                     ...prevState,
                     enabled: checked,
                }));
           } else if (name === "idleTime") {
-               setIdleScreenSettings((prevState) => ({
+               setIdleScreenSettingsLocal((prevState) => ({
                     ...prevState,
                     idleTime: parseInt(value, 10),
                }));
@@ -182,7 +191,8 @@ export const Settings: React.FC = () => {
           }
 
           if (activeTab === "idleScreen") {
-               localStorage.setItem("idleScreen", JSON.stringify(idleScreenSettings));
+               setIdleScreenSettings(idleScreenSettingsLocal);
+               localStorage.setItem("idleScreen", JSON.stringify(idleScreenSettingsLocal));
                toast.success("Saved Settings");
           }
 
@@ -516,7 +526,7 @@ export const Settings: React.FC = () => {
                                                   type="switch"
                                                   id="enabled"
                                                   name="enabled"
-                                                  checked={idleScreenSettings.enabled}
+                                                  checked={idleScreenSettingsLocal.enabled}
                                                   onChange={handleIdleScreenChange}
                                              />
                                         </FormGroup>
@@ -526,9 +536,10 @@ export const Settings: React.FC = () => {
                                                   type="number"
                                                   name="idleTime"
                                                   id="idleTime"
-                                                  value={idleScreenSettings.idleTime}
+                                                  value={idleScreenSettingsLocal.idleTime}
                                                   onChange={handleIdleScreenChange}
                                                   min={1}
+                                                  max={10}
                                              />
                                         </FormGroup>
                                    </Form>
